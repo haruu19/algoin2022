@@ -1,20 +1,22 @@
-import java.io.;
-import java.util.;
+package algoin2022;
+
+import java.io.*;
+import java.util.*;
 
 public class Boj_1135_뉴스전하기_G1_트리DP {
     static int N;
     static int[] d;
-    static ListInteger[] list;
+    static List<Integer>[] list;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = null;
         
         N = Integer.parseInt(br.readLine());
         list = new ArrayList[N];
-        for(int i=0;iN;i++) list[i] = new ArrayList();
+        for(int i=0;i<N;i++) list[i] = new ArrayList();
         d = new int[N];
         st = new StringTokenizer(br.readLine());
-        for(int i=0;iN;i++) {
+        for(int i=0;i<N;i++) {
             int n = Integer.parseInt(st.nextToken());
             if(i == 0) continue;
             list[n].add(i);
@@ -29,16 +31,16 @@ public class Boj_1135_뉴스전하기_G1_트리DP {
             return;
         }
         int max = Integer.MIN_VALUE;
-        ListInteger tmp = new ArrayList();
-        for(int ele  list[n]) {
+        List<Integer> tmp = new ArrayList();
+        for(int ele : list[n]) {
             dfs(ele);
             tmp.add(d[ele]);
         }
         Collections.sort(tmp, Collections.reverseOrder());
-        for(int i=0;itmp.size();i++) {
+        for(int i=0;i<tmp.size();i++) {
             tmp.set(i, tmp.get(i) + (i+1));
         }
-        for(int ele  tmp) max = Math.max(max, ele);
+        for(int ele : tmp) max = Math.max(max, ele);
         d[n] = max;
     }
 }
