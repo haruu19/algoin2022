@@ -3,7 +3,7 @@ package algoin2022;
 import java.io.*;
 import java.util.*;
 
-public class Boj_10713_기차여행_G5_DP {
+public class Boj_10713_기차여행_G5_누적합 {
     static int N,M,ans;
     static int[] path, a, b, c, sum;
     public static void main(String[] args) throws IOException {
