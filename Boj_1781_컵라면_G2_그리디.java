@@ -5,32 +5,24 @@ import java.util.*;
 
 public class Boj_1781_컵라면_G2_그리디 {
     static class Problem implements Comparable<Problem> {
-        int id;
         int deadline;
         int cnt;
-        public Problem(int id, int deadline, int cnt) {
-            this.id = id;
+        public Problem(int deadline, int cnt) {
             this.deadline = deadline;
             this.cnt = cnt;
         }
         @Override
         public int compareTo(Problem o) {
             if(this.deadline == o.deadline) {
-                return this.cnt - o.cnt;
+                return o.cnt - this.cnt;
             } else {
                 return this.deadline - o.deadline;
             }
         }
     }
     static PriorityQueue<Problem> pq = new PriorityQueue<>();
-    static PriorityQueue<Integer> pq2 = new PriorityQueue<>(1, new Comparator<Integer>() {
-        @Override
-        public int compare(Integer o1, Integer o2) {
-            return o1-o2;
-        }
-    });
-    static int N;
-    static long ans;
+    static PriorityQueue<Integer> pq2 = new PriorityQueue<>();
+    static int N,ans;
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringTokenizer st;
     
@@ -40,23 +32,23 @@ public class Boj_1781_컵라면_G2_그리디 {
     }
     
     private static void solve() {
-        int elapsed_time = 1;
+        // pq2에 원소 하나씩 삽입
+        // pq2.size()를 회차로 생각하면,
+        // pq2에 넣을 원소의 deadline > pq2.size()면 그냥 넣음
+        // pq2에 넣을 원소의 deadline <= pq2.size()면 pq2.peek() < 원소.cnt 인 경우 pq2.poll(), pq2.offer(원소)
         while(!pq.isEmpty()) {
-            Problem p = pq.peek();
-            if(elapsed_time == p.deadline) {
-                p = pq.poll();
+            Problem p = pq.poll();
+            if(p.deadline > pq2.size()) {
                 pq2.offer(p.cnt);
-                if(pq2.size() > elapsed_time) {
-                    while(pq2.size() > elapsed_time) {
-                        pq2.poll();
-                    }
-                }
             } else {
-                elapsed_time++;
+                if(pq2.peek() < p.cnt) {
+                    pq2.poll();
+                    pq2.offer(p.cnt);
+                }
             }
         }
-        while(!pq2.isEmpty()) ans = (long) pq2.poll();
-        if(ans > 2147483648L) ans = 2147483648L;
+        
+        pq2.forEach(x -> ans += x);
         System.out.println(ans);
     }
     
@@ -66,7 +58,7 @@ public class Boj_1781_컵라면_G2_그리디 {
             st = new StringTokenizer(br.readLine());
             int deadline = Integer.parseInt(st.nextToken());
             int cnt = Integer.parseInt(st.nextToken());
-            pq.add(new Problem(i, deadline, cnt));
+            pq.add(new Problem(deadline, cnt));
         }
     }
 }
